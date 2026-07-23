@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Fleet Management Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a, #111827, #020617);
+            color: white;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #facc15;
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.5);
+        }
+
+        .subtitle {
+            color: #d1d5db;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .card-box {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 30px;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-box:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(250, 204, 21, 0.25);
+        }
+
+        .card-box h3 {
+            color: #facc15;
+            margin-bottom: 15px;
+        }
+
+        .btn-custom {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background: #16a34a;
+            color: white;
+        }
+
+        .ai-badge {
+            background: #7c3aed;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="hero">
+        <h1 class="title">AI Fleet Management Platform</h1>
+        <p class="subtitle">Smart driver, van, rota and AI-powered fleet control system</p>
+        <span class="ai-badge">AI Engineer Portfolio Project</span>
+    </div>
+
+    <div class="row g-4 mt-4">
+        <div class="col-md-3">
+            <div class="card-box">
+                <h3>{{ total_drivers }}</h3>
+                <p>Total Drivers</p>
+            </div>
+        </div>
+
+    <div class="col-md-3">
+        <div class="card-box">
+            <h3>{{ total_vans }}</h3>
+            <p>Total Vans</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box">
+            <h3>{{ assigned_today }}</h3>
+            <p>Assigned Today</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card-box">
+            <h3>{{ available_today }}</h3>
+            <p>Available Today</p>
+        </div>
+    </div>
+
+</div>
+     
+<div class="row mt-4">
+
+    <div class="col-12">
+
+        <div class="card-box">
+            <h3>AI Insight</h3>
+            <p>{{ ai_insight }}</p>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="card-box">
+                <h3>Drivers</h3>
+                <p>Manage drivers, email, phone and user IDs.</p>
+                <a href="/drivers" class="btn btn-custom">Open</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box">
+                <h3>Vans</h3>
+                <p>Add and manage fleet vehicles.</p>
+                <a href="/vans" class="btn btn-custom">Open</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box">
+                <h3>Availability</h3>
+                <p>Track driver availability and working days.</p>
+                <a href="/availability" class="btn btn-custom">Open</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box">
+                <h3>Van History</h3>
+                <p>Search by date and see driver-van records.</p>
+                <a href="/van_history" class="btn btn-custom">Open</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box">
+                <h3>Current Allocations</h3>
+                <p>See today’s assigned vans instantly.</p>
+                <a href="/current_allocations" class="btn btn-custom">Open</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-box">
+                <h3>AI Assistant</h3>
+                <p>Coming next: AI support for drivers and admins.</p>
+                <a href="/ai_assistant" class="btn btn-custom">
+                    open
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card-box">
+                <h3>Driver Portal</h3>
+                <p>Drivers can log in, assign today’s van, and submit notes.</p>
+                <a href="/driver_login" class="btn btn-custom">Driver Login</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
