@@ -391,7 +391,8 @@ Keep answers professional and simple.
 
            answer = completion.choices[0].message.content
 
-        print(f"[AI error] {e}")
+        except Exception as e:
+            print(f"[AI error] {e}")
             answer = "Sorry, I couldn't process that request right now."
 
     return render_template("ai_assistant.html", answer=answer)
