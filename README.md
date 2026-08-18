@@ -1,4 +1,7 @@
 # AI Fleet Management
+**🚀 [Live Demo →](https://ai-fleet-management.onrender.com)** · [AI Assistant](https://ai-fleet-management.onrender.com/ai_assistant)
+
+> Hosted on Render's free tier — the first request may take up to a minute while the service wakes up.
 
 A Flask application for managing a small vehicle fleet — drivers, vans, daily
 allocations, and availability — with an AI assistant that answers questions
