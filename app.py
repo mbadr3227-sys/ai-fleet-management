@@ -7,7 +7,8 @@ import random
 from datetime import date
 
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=api_key) if api_key else None
 app = Flask(__name__)
 
 app.secret_key = "driver_secret_key"
@@ -327,6 +328,8 @@ def ai_assistant():
 
     if request.method == "POST":
         question = request.form["question"]
+        if client is None:
+            return render_template("ai_assistant.html", answer="AI assistant unavailable: no API key configured.")
 
         try:
            conn = get_db_connection()
@@ -388,29 +391,67 @@ Keep answers professional and simple.
 
            answer = completion.choices[0].message.content
 
-        except Exception as e:
-            answer = str(e)
+        print(f"[AI error] {e}")
+            answer = "Sorry, I couldn't process that request right now."
 
     return render_template("ai_assistant.html", answer=answer)
 
 def setup_database():
     conn = get_db_connection()
+
     conn.execute("""
         CREATE TABLE IF NOT EXISTS drivers (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             license TEXT NOT NULL,
             email TEXT,
-            uswe_id TEXT
+            user_id TEXT,
+            phone TEXT
         )
     """)
 
-    count = conn.execute("SELECT COUNT(*) FROM drivers").fetchone()[0]
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS vans (
+            reg TEXT PRIMARY KEY,
+            model TEXT NOT NULL,
+            status TEXT NOT NULL
+        )
+    """)
 
-    if count == 0:
-        conn.execute("INSERT INTO drivers (name, license) VALUES (?, ?)", ("Ahmed", "B"))
-        conn.execute("INSERT INTO drivers (name, license) VALUES (?, ?)", ("Mohamed", "C"))
-        conn.execute("INSERT INTO drivers (name, license) VALUES (?, ?)", ("Ali", "D"))
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS availability (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            driver TEXT NOT NULL,
+            day TEXT NOT NULL,
+            time TEXT NOT NULL
+        )
+    """)
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS driver_van_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            driver_name TEXT NOT NULL,
+            driver_email TEXT,
+            van_reg TEXT NOT NULL,
+            work_date TEXT NOT NULL,
+            shift_time TEXT,
+            notes TEXT
+        )
+    """)
+
+    if conn.execute("SELECT COUNT(*) FROM drivers").fetchone()[0] == 0:
+        for name, lic in [("Ahmed", "B"), ("Mohamed", "C"), ("Ali", "D")]:
+            conn.execute(
+                "INSERT INTO drivers (name, license, email, user_id) VALUES (?, ?, ?, ?)",
+                (name, lic, f"{name.lower()}@example.com", str(random.randint(1000, 9999)))
+            )
+
+    if conn.execute("SELECT COUNT(*) FROM vans").fetchone()[0] == 0:
+        for reg, model in [("AB12 XYZ", "Ford Transit"), ("CD34 VAN", "Mercedes Sprinter")]:
+            conn.execute(
+                "INSERT INTO vans (reg, model, status) VALUES (?, ?, ?)",
+                (reg, model, "Available")
+            )
 
     conn.commit()
     conn.close()
