@@ -1,82 +1,73 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Drivers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% extends "base.html" %}
 
-<body class="bg-dark text-white">
+{% block title %}Drivers — Fleet Control{% endblock %}
 
-<div class="container mt-5">
+{% block content %}
 
-    <h1 class="text-warning">🚛 Drivers Management</h1>
+<span class="eyebrow">Roster</span>
+<h1 class="mt-2">Drivers</h1>
+<p class="muted">Select a driver to edit or remove their record.</p>
 
-    <a href="#" id="editBtn" class="btn btn-primary">Edit Driver</a>
-
-    <a href="#" id="deleteBtn" class="btn btn-danger">Delete Driver</a>
-
-    <a href="/add_driver" class="btn btn-success mt-3">Add Driver</a>
-
-    <table class="table table-dark table-striped mt-4">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>email</th>
-                <th>phone</th>
-                <th>User id</th>
-                <th>Select</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        {% for driver in drivers %}
-        <tr>
-            <td>{{ driver.id }}</td>
-            <td>{{ driver.name }}</td>
-            <td>{{ driver.email }}</td>
-            <td>{{ driver.phone }}</td>
-            <td>{{ driver.user_id }}</td>
-
-            </td>
-                <input type="radio" name="selected_driver" value="{{ driver.id }}">
-            <td>
-        </td>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="/" class="btn btn-warning">
-        Back Dashboard
-    </a>
-
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin:20px 0">
+  <a href="/add_driver" class="btn btn-fleet">Add driver</a>
+  <button type="button" id="editBtn" class="btn btn-ghost">Edit selected</button>
+  <button type="button" id="deleteBtn" class="btn btn-ghost">Delete selected</button>
 </div>
+
+<div class="table-wrap reveal">
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width:52px">Pick</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>User ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for driver in drivers %}
+      <tr>
+        <td><input type="radio" name="selected_driver" value="{{ driver.id }}" aria-label="Select {{ driver.name }}"></td>
+        <td class="mono">{{ driver.id }}</td>
+        <td>{{ driver.name }}</td>
+        <td class="muted">{{ driver.email }}</td>
+        <td class="mono">{{ driver.phone }}</td>
+        <td><span class="plate">{{ driver.user_id }}</span></td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="6" class="muted" style="text-align:center;padding:30px">
+          No drivers yet. Add the first one to start allocating vans.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<a href="/" class="btn btn-ghost mt-4">Back to dashboard</a>
+
+{% endblock %}
+
+{% block extra_js %}
 <script>
-document.getElementById("editBtn").onclick = function() {
-    let selected = document.querySelector(
-        'input[name="selected_driver"]:checked'
-    );
-
-    if(selected){
-        window.location.href =
-        "/edit_driver/" + selected.value;
-    }else{
-        alert("Choose a driver first");
-    }
+function selectedDriver(){
+  var picked = document.querySelector('input[name="selected_driver"]:checked');
+  if (!picked) { alert('Pick a driver from the table first.'); return null; }
+  return picked.value;
+}
+document.getElementById('editBtn').onclick = function(){
+  var id = selectedDriver();
+  if (id) window.location.href = '/edit_driver/' + id;
 };
-
-document.getElementById("deleteBtn").onclick = function() {
-    let selected = document.querySelector(
-        'input[name="selected_driver"]:checked'
-    );
-
-    if(selected){
-        window.location.href =
-        "/delete_driver/" + selected.value;
-    }else{
-        alert("Choose a driver first");
-    }
+document.getElementById('deleteBtn').onclick = function(){
+  var id = selectedDriver();
+  if (!id) return;
+  if (confirm('Delete this driver? This cannot be undone.')) {
+    window.location.href = '/delete_driver/' + id;
+  }
 };
 </script>
-</body>
-</html>
+{% endblock %}
